@@ -1,15 +1,15 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-
-namespace EduQuiz.Infrastructure.Security
+﻿namespace EduQuiz.Infrastructure.Security
 {
     public class PasswordHasher
     {
         public static string Hash(string password)
         {
-            using var sha256 = SHA256.Create();
-            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(bytes);
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public static bool Verify(string password, string hash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hash);
         }
     }
 }

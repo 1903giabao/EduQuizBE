@@ -1,6 +1,13 @@
-
+using EduQuiz.Api.Middlewares;
+using EduQuiz.Application;
+using EduQuiz.Application.Common.Responses;
+using EduQuiz.Infrastructure;
 using EduQuiz.Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json;
 
 namespace EduQuiz.Api
 {
@@ -10,26 +17,63 @@ namespace EduQuiz.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddDbContext<EduQuizDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new()
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
                 {
-                    Title = "My API",
-                    Version = "v1",
-                    Description = "ASP.NET Core Web API with Swagger"
+                    options.JsonSerializerOptions.PropertyNamingPolicy =
+                        JsonNamingPolicy.CamelCase;
                 });
+
+            #region Validator config
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState
+                        .SelectMany(x => x.Value!.Errors)
+                        .Select(e => new ApiError
+                        {
+                            Code = "VALIDATION_ERROR",
+                            Message = e.ErrorMessage
+                        })
+                        .ToList();
+
+                    return new BadRequestObjectResult(
+                        ApiResponse<object>.Fail(errors.ToArray()));
+                };
             });
+            #endregion
+
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure(builder.Configuration);
+
+            #region JWT config
+            var jwtSettings = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.UTF8.GetBytes(jwtSettings["AccessTokenKey"]!);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings["Issuer"],
+                        ValidAudience = jwtSettings["Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+                });
+            #endregion
+
+            builder.Services.AddRouting(o => o.LowercaseUrls = true);
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
+            //Db Seeder
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<EduQuizDbContext>();
@@ -48,6 +92,8 @@ namespace EduQuiz.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
