@@ -43,10 +43,13 @@ namespace EduQuiz.Infrastructure.Context.Configurations
                 .HasColumnType("timestamp without time zone");
 
             builder.Property(x => x.Address)
-                .HasMaxLength(500);
+                .HasMaxLength(255);
 
             builder.Property(x => x.PhoneNumber)
                 .HasMaxLength(20);
+
+            builder.Property(x => x.IsActive)
+                .HasDefaultValue(true);
 
             builder.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("NOW()");

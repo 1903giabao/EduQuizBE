@@ -18,6 +18,7 @@ namespace EduQuiz.Domain.Entities
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; } = true;
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
     }
