@@ -17,6 +17,21 @@ namespace EduQuiz.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            #region Add CORS policy
+            var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .WithOrigins(allowedOrigins)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+            #endregion
+
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
@@ -93,6 +108,7 @@ namespace EduQuiz.Api
 
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
