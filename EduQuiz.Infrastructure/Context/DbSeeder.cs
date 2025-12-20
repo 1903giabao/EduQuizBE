@@ -23,9 +23,9 @@ namespace EduQuiz.Infrastructure.Context
                 await context.SaveChangesAsync();
             }
 
-            var teacher = await context.Roles.FirstAsync(r => r.Name == "Teacher");
-            var student = await context.Roles.FirstAsync(r => r.Name == "Student");
-            var admin = await context.Roles.FirstAsync(r => r.Name == "Admin");
+            var teacherRoleExisted = await context.Roles.FirstAsync(r => r.Name == "Teacher");
+            var studentRoleExisted = await context.Roles.FirstAsync(r => r.Name == "Student");
+            var adminRoleExisted = await context.Roles.FirstAsync(r => r.Name == "Admin");
 
             if (!await context.Accounts.AnyAsync())
             {
@@ -42,8 +42,9 @@ namespace EduQuiz.Infrastructure.Context
                         DateOfBirth = new DateTime(1995, 5, 12),
                         Address = "Hanoi, Vietnam",
                         PhoneNumber = "0901234567",
-                        RoleId = teacher.Id,
-                        CreatedAt = DateTime.UtcNow
+                        RoleId = teacherRoleExisted.Id,
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true
                     },
                     new()
                     {
@@ -56,8 +57,9 @@ namespace EduQuiz.Infrastructure.Context
                         DateOfBirth = new DateTime(2005, 9, 20),
                         Address = "Ho Chi Minh City, Vietnam",
                         PhoneNumber = "0912345678",
-                        RoleId = student.Id,
-                        CreatedAt = DateTime.UtcNow
+                        RoleId = studentRoleExisted.Id,
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true
                     },
                     new()
                     {
@@ -70,14 +72,52 @@ namespace EduQuiz.Infrastructure.Context
                         DateOfBirth = new DateTime(1990, 1, 1),
                         Address = "Head Office",
                         PhoneNumber = "0999999999",
-                        RoleId = admin.Id,
-                        CreatedAt = DateTime.UtcNow
+                        RoleId = adminRoleExisted.Id,
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive= true
                     }
                 };
 
                 await context.Accounts.AddRangeAsync(accounts);
                 await context.SaveChangesAsync();
             }
+
+            if (!await context.Teachers.AnyAsync())
+            {
+                var teacherAccount = await context.Accounts.FirstOrDefaultAsync(a => a.Email == "teacher@test.com");
+                if (teacherAccount != null)
+                {
+                    var teacher = new Teacher
+                    {
+                        Id = Guid.NewGuid(),
+                        AccountId = teacherAccount.Id,
+                        Bio = "English teacher with 5 years experience",
+                        Department = "English",                       
+                    };
+
+                    await context.Teachers.AddAsync(teacher);
+                }
+            }
+
+            if (!await context.Students.AnyAsync())
+            {
+                var studentAccount = await context.Accounts.FirstOrDefaultAsync(a => a.Email == "student@test.com");
+                if (studentAccount != null)
+                {
+                    var student = new Student
+                    {
+                        Id = Guid.NewGuid(),
+                        AccountId = studentAccount.Id,
+                        Grade = "10",
+                        ParentPhoneNumer = "0909898989",
+                        School = "Binh Phu Highschool"                       
+                    };
+
+                    await context.Students.AddAsync(student);
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }

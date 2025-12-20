@@ -29,8 +29,8 @@ namespace EduQuiz.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -54,6 +54,11 @@ namespace EduQuiz.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -82,6 +87,216 @@ namespace EduQuiz.Infrastructure.Migrations
                     b.ToTable("accounts", (string)null);
                 });
 
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Attendance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassSlotId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsAttended")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("MarkedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassSlotId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("attendances", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Class", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("classes", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.ClassSlot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsOffline")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("class_slots", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.PrimitiveCollection<string[]>("Answer")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("Explanation")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.PrimitiveCollection<string[]>("Options")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("questions", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Quiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("quizzes", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.QuizQuestion", b =>
+                {
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.HasKey("QuizId", "QuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("quiz_questions", (string)null);
+                });
+
             modelBuilder.Entity("EduQuiz.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -106,6 +321,130 @@ namespace EduQuiz.Infrastructure.Migrations
                     b.ToTable("roles", (string)null);
                 });
 
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Student", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("ParentPhoneNumer")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("School")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("students", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.StudentClass", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("StudentId", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("student_classes", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.StudentQuiz", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Answers")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("AttemptNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeSpan>("ElapsedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 0, 0));
+
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsPaused")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastPausedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime?>("SubmittedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.HasKey("StudentId", "QuizId");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("student_quizzes", (string)null);
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Teacher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("teachers", (string)null);
+                });
+
             modelBuilder.Entity("EduQuiz.Domain.Entities.Account", b =>
                 {
                     b.HasOne("EduQuiz.Domain.Entities.Role", "Role")
@@ -117,9 +456,193 @@ namespace EduQuiz.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Attendance", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.ClassSlot", "ClassSlot")
+                        .WithMany("Attendances")
+                        .HasForeignKey("ClassSlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuiz.Domain.Entities.Student", "Student")
+                        .WithMany("Attendances")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassSlot");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Class", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("Classes")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.ClassSlot", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Class", "Class")
+                        .WithMany("Slots")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("Questions")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Quiz", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Class", "Class")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.QuizQuestion", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Question", "Question")
+                        .WithMany("QuizQuestions")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuiz.Domain.Entities.Quiz", "Quiz")
+                        .WithMany("QuizQuestions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Student", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Account", "Account")
+                        .WithOne()
+                        .HasForeignKey("EduQuiz.Domain.Entities.Student", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.StudentClass", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Class", "Class")
+                        .WithMany("StudentClasses")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuiz.Domain.Entities.Student", "Student")
+                        .WithMany("StudentClasses")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.StudentQuiz", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Quiz", "Quiz")
+                        .WithMany("StudentQuizzes")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuiz.Domain.Entities.Student", "Student")
+                        .WithMany("StudentQuizzes")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Teacher", b =>
+                {
+                    b.HasOne("EduQuiz.Domain.Entities.Account", "Account")
+                        .WithOne()
+                        .HasForeignKey("EduQuiz.Domain.Entities.Teacher", "AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Class", b =>
+                {
+                    b.Navigation("Quizzes");
+
+                    b.Navigation("Slots");
+
+                    b.Navigation("StudentClasses");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.ClassSlot", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Question", b =>
+                {
+                    b.Navigation("QuizQuestions");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Quiz", b =>
+                {
+                    b.Navigation("QuizQuestions");
+
+                    b.Navigation("StudentQuizzes");
+                });
+
             modelBuilder.Entity("EduQuiz.Domain.Entities.Role", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Student", b =>
+                {
+                    b.Navigation("Attendances");
+
+                    b.Navigation("StudentClasses");
+
+                    b.Navigation("StudentQuizzes");
+                });
+
+            modelBuilder.Entity("EduQuiz.Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("Classes");
+
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }
