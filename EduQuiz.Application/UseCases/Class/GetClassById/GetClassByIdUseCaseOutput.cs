@@ -4,19 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EduQuiz.Domain.Entities
+namespace EduQuiz.Application.UseCases.Class
 {
-    public class Class
+    public class GetClassByIdUseCaseOutput
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
         public Guid? TeacherId { get; set; }
-        public Teacher? Teacher { get; set; }
-        public ICollection<ClassSlot> Slots { get; set; }
-        public ICollection<Quiz> Quizzes { get; set; }
-        public ICollection<StudentClass> StudentClasses { get; set; }
+        public string? TeacherName { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace EduQuiz.Domain.Entities
         public Guid StudentId { get; set; }
         public Student Student { get; set; }
         public bool IsAttended { get; set; } = false;
-        public DateTime MarkedAt { get; set; } = DateTime.UtcNow;
+        public DateTime MarkedAt { get; set; }
         public string? Notes { get; set; }
     }
 }
