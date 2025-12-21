@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EduQuiz.Share.Enums.Enum;
 
 namespace EduQuiz.Domain.Entities
 {
@@ -11,7 +12,7 @@ namespace EduQuiz.Domain.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public bool IsActive { get; set; } = true;
+        public ClassStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }

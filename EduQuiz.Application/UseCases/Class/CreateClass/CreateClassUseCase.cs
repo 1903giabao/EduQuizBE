@@ -29,7 +29,8 @@ namespace EduQuiz.Application.UseCases.Class
             {
                 Name = useCaseInput.Name,
                 Description = useCaseInput.Description,
-                TeacherId = useCaseInput.TeacherId
+                TeacherId = useCaseInput.TeacherId,
+                Status = Share.Enums.Enum.ClassStatus.DRAFT,
             };
 
             await _unitOfWork.Classes.AddAsync(newClass);

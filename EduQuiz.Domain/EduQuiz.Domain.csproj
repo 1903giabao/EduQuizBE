@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EduQuiz.Share\EduQuiz.Share.csproj" />
+  </ItemGroup>
+
 </Project>

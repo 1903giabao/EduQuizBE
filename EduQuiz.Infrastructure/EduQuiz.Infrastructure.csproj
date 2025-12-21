@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EduQuiz.Domain\EduQuiz.Domain.csproj" />
+    <ProjectReference Include="..\EduQuiz.Share\EduQuiz.Share.csproj" />
   </ItemGroup>
 
   <ItemGroup>

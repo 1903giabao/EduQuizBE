@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EduQuiz.Share.Enums.Enum;
 
 namespace EduQuiz.Infrastructure.Context.Configurations
 {
@@ -23,8 +24,11 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(c => c.Description)
                 .HasMaxLength(500);
 
-            builder.Property(x => x.IsActive)
-                .HasDefaultValue(true);
+            builder.Property(c => c.Status)
+                .HasConversion<string>()
+                .HasColumnType("class_status")
+                .HasDefaultValue(ClassStatus.DRAFT)
+                .IsRequired();
 
             builder.Property(x => x.CreatedAt)
                 .HasColumnType("timestamp without time zone")

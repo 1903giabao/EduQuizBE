@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EduQuiz.Share.Enums.Enum;
 
 namespace EduQuiz.Infrastructure.Context
 {
@@ -31,7 +32,7 @@ namespace EduQuiz.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.HasPostgresEnum<ClassStatus>();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EduQuizDbContext).Assembly);
         }
     }
