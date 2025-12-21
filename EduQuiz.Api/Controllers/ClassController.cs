@@ -1,6 +1,7 @@
 ﻿using EduQuiz.Application.Common.Responses;
 using EduQuiz.Application.Common.UseCaseInvoker;
 using EduQuiz.Application.UseCases.Class;
+using EduQuiz.Application.UseCases.Class.UpdateClass;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuiz.Api.Controllers
@@ -24,34 +25,6 @@ namespace EduQuiz.Api.Controllers
             return Ok(ApiResponse<List<GetClassesUseCaseOutput>>.Ok(result, meta));
         }
 
-        [HttpGet("teacher/{teacherId}")]
-        public async Task<IActionResult> GetClassesByTeacherId(Guid teacherId)
-        {
-            var request = new GetClassesByTeacherIdUseCaseInput { TeacherId = teacherId };
-            var result = await UseCaseInvoker.HandleAsync<GetClassesByTeacherIdUseCaseInput, List<GetClassesByTeacherIdUseCaseOutput>>(request);
-            var meta = new ApiMeta
-            {
-                Page = request.Page,
-                PageSize = request.PageSize,
-                TotalItems = result.Count,
-            };
-            return Ok(ApiResponse<List<GetClassesByTeacherIdUseCaseOutput>>.Ok(result, meta));
-        }
-
-        [HttpGet("student/{studentId}")]
-        public async Task<IActionResult> GetClassesByStudentId(Guid studentId)
-        {
-            var request = new GetClassesByStudentIdUseCaseInput { StudentId = studentId };
-            var result = await UseCaseInvoker.HandleAsync<GetClassesByStudentIdUseCaseInput, List<GetClassesByStudentIdUseCaseOutput>>(request);
-            var meta = new ApiMeta
-            {
-                Page = request.Page,
-                PageSize = request.PageSize,
-                TotalItems = result.Count,
-            };
-            return Ok(ApiResponse<List<GetClassesByStudentIdUseCaseOutput>>.Ok(result, meta));
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClassById(Guid id)
         {
@@ -65,6 +38,14 @@ namespace EduQuiz.Api.Controllers
         {
             var result = await UseCaseInvoker.HandleAsync<CreateClassUseCaseInput, CreateClassUseCaseOutput>(request);
             return Ok(ApiResponse<CreateClassUseCaseOutput>.Ok(result));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateClass(Guid id, [FromBody] UpdateClassUseCaseInput request)
+        {
+            request.Id = id;
+            var result = await UseCaseInvoker.HandleAsync<UpdateClassUseCaseInput, UpdateClassUseCaseOutput>(request);
+            return Ok(ApiResponse<UpdateClassUseCaseOutput>.Ok(result));
         }
     }
 }

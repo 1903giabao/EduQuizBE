@@ -20,6 +20,7 @@ namespace EduQuiz.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_status", new[] { "DRAFT", "PUBLISHED", "UNPUBLISHED", "ONGOING", "REMOVED" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("EduQuiz.Domain.Entities.Account", b =>
@@ -137,15 +138,16 @@ namespace EduQuiz.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("class_status")
+                        .HasDefaultValue("DRAFT");
 
                     b.Property<Guid?>("TeacherId")
                         .HasColumnType("uuid");

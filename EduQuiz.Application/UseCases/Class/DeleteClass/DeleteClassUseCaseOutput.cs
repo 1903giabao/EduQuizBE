@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EduQuiz.Share.DTOs
+namespace EduQuiz.Application.UseCases.Class.DeleteClass
 {
-    internal class GeneralResponse
+    public class DeleteClassUseCaseOutput
     {
     }
 }
