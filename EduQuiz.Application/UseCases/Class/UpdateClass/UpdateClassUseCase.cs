@@ -1,14 +1,8 @@
 ﻿using EduQuiz.Application.Common.IUseCase;
-using EduQuiz.Domain.Entities;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EduQuiz.Application.UseCases.Class.UpdateClass
+namespace EduQuiz.Application.UseCases.Class
 {
     public class UpdateClassUseCase : IUseCase<UpdateClassUseCaseInput, UpdateClassUseCaseOutput>
     {

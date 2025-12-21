@@ -1,7 +1,6 @@
 ﻿using EduQuiz.Application.Common.Responses;
 using EduQuiz.Application.Common.UseCaseInvoker;
 using EduQuiz.Application.UseCases.Class;
-using EduQuiz.Application.UseCases.Class.UpdateClass;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuiz.Api.Controllers
@@ -46,6 +45,14 @@ namespace EduQuiz.Api.Controllers
             request.Id = id;
             var result = await UseCaseInvoker.HandleAsync<UpdateClassUseCaseInput, UpdateClassUseCaseOutput>(request);
             return Ok(ApiResponse<UpdateClassUseCaseOutput>.Ok(result));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClass(Guid id)
+        {
+            var request = new DeleteClassUseCaseInput { Id = id };
+            var result = await UseCaseInvoker.HandleAsync<DeleteClassUseCaseInput, DeleteClassUseCaseOutput>(request);
+            return Ok(ApiResponse<DeleteClassUseCaseOutput>.Ok(result));
         }
     }
 }

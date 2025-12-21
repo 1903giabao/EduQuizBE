@@ -2,7 +2,6 @@
 using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace EduQuiz.Application.UseCases.Class
 {
@@ -21,9 +20,9 @@ namespace EduQuiz.Application.UseCases.Class
         {
             var query = _unitOfWork.Classes.Query()
                 .Include(x => x.Teacher)
-                .ThenInclude(x => x.Account)
+                    .ThenInclude(x => x.Account)
                 .Include(x => x.StudentClasses)
-                .ThenInclude(x => x.Student)
+                    .ThenInclude(x => x.Student)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(useCaseInput.Keyword))
