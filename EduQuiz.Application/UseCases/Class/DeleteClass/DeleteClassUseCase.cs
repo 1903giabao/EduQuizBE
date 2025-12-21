@@ -1,13 +1,8 @@
 ﻿using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EduQuiz.Application.UseCases.Class.DeleteClass
+namespace EduQuiz.Application.UseCases.Class
 {
     public class DeleteClassUseCase : IUseCase<DeleteClassUseCaseInput, DeleteClassUseCaseOutput>
     {
@@ -20,7 +15,17 @@ namespace EduQuiz.Application.UseCases.Class.DeleteClass
 
         public async Task<DeleteClassUseCaseOutput> HandleAsync(DeleteClassUseCaseInput useCaseInput)
         {
-            var existingClass = _unitOfWork.Classes.Query().FirstOrDefaultAsync(x => x.Id == useCaseInput.Id);
+            var existingClass = await _unitOfWork.Classes.Query().FirstOrDefaultAsync(x => x.Id == useCaseInput.Id && x.Status != Share.Enums.Enum.ClassStatus.ONGOING);
+
+            if (existingClass == null)
+            {
+                throw new KeyNotFoundException($"Class with id: {useCaseInput.Id} not found");
+            }
+
+            existingClass.Status = Share.Enums.Enum.ClassStatus.REMOVED;
+
+            _unitOfWork.Classes.Update(existingClass);
+            await _unitOfWork.SaveChangesAsync();
 
             return new DeleteClassUseCaseOutput();
         }
