@@ -2,6 +2,8 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using EduQuiz.Application.Common.IUseCase;
+using Scrutor;
 
 namespace EduQuiz.Application
 {
@@ -9,6 +11,12 @@ namespace EduQuiz.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            _ = services.Scan(s =>
+                    s.FromCallingAssembly()
+                    .AddClasses(c => c.AssignableTo(typeof(IUseCase<,>)))
+                    .AsImplementedInterfaces()
+                    .WithScopedLifetime());
+
             services.AddScoped<IAuthService, AuthService>();
 
             //Validator

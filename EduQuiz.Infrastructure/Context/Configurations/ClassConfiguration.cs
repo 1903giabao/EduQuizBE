@@ -26,6 +26,9 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(x => x.IsActive)
                 .HasDefaultValue(true);
 
+            builder.Property(x => x.CreatedAt)
+                .HasDefaultValueSql("NOW()");
+
             builder.HasOne(c => c.Teacher)
                 .WithMany(t => t.Classes)
                 .HasForeignKey(c => c.TeacherId)

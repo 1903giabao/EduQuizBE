@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace EduQuiz.Application.Auth
+namespace EduQuiz.Application.Auth.UseCases.LoginUseCase
 {
-    public class LoginRequestValidator : AbstractValidator<LoginRequest>
+    public class LoginUseCaseValidator : AbstractValidator<LoginUseCaseInput>
     {
-        public LoginRequestValidator()
+        public LoginUseCaseValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required")
