@@ -12,8 +12,9 @@ namespace EduQuiz.Domain.Entities
         public string Name { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
-        public Guid TeacherId { get; set; }
-        public Teacher Teacher { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Guid? TeacherId { get; set; }
+        public Teacher? Teacher { get; set; }
         public ICollection<ClassSlot> Slots { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
         public ICollection<StudentClass> StudentClasses { get; set; }

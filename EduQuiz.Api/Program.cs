@@ -1,6 +1,7 @@
 using EduQuiz.Api.Middlewares;
 using EduQuiz.Application;
 using EduQuiz.Application.Common.Responses;
+using EduQuiz.Application.Common.UseCaseInvoker;
 using EduQuiz.Infrastructure;
 using EduQuiz.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -87,6 +88,8 @@ namespace EduQuiz.Api
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            UseCaseInvoker.Configure(app.Services);
 
             //Db Seeder
             using (var scope = app.Services.CreateScope())

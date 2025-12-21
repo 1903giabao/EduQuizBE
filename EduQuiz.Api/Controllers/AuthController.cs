@@ -1,10 +1,9 @@
 ﻿using EduQuiz.Application.Auth;
 using EduQuiz.Application.Auth.DTOs;
+using EduQuiz.Application.Auth.UseCases.LoginUseCase;
 using EduQuiz.Application.Common.Responses;
-using EduQuiz.Infrastructure.Context;
-using EduQuiz.Infrastructure.Security;
+using EduQuiz.Application.Common.UseCaseInvoker;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EduQuiz.Api.Controllers;
 
@@ -20,10 +19,10 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginUseCaseInput request)
     {
-        var result = await _authService.LoginAsync(request);
-        return Ok(ApiResponse<LoginResponse>.Ok(result));
+        var result = await UseCaseInvoker.HandleAsync<LoginUseCaseInput, LoginUseCaseOutput>(request);
+        return Ok(ApiResponse<LoginUseCaseOutput>.Ok(result));
     }
 
     [HttpPost("refresh")]
