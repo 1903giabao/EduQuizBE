@@ -19,8 +19,9 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(a => a.IsAttended)
                 .HasDefaultValue(false);
 
-            builder.Property(a => a.MarkedAt)
-                .HasDefaultValueSql("NOW()");
+            builder.Property(x => x.MarkedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
 
             builder.Property(a => a.Notes)
                 .HasMaxLength(500);

@@ -43,7 +43,6 @@ namespace EduQuiz.Infrastructure.Context
                         Address = "Hanoi, Vietnam",
                         PhoneNumber = "0901234567",
                         RoleId = teacherRoleExisted.Id,
-                        CreatedAt = DateTime.UtcNow,
                         IsActive = true
                     },
                     new()
@@ -58,7 +57,6 @@ namespace EduQuiz.Infrastructure.Context
                         Address = "Ho Chi Minh City, Vietnam",
                         PhoneNumber = "0912345678",
                         RoleId = studentRoleExisted.Id,
-                        CreatedAt = DateTime.UtcNow,
                         IsActive = true
                     },
                     new()
@@ -73,7 +71,6 @@ namespace EduQuiz.Infrastructure.Context
                         Address = "Head Office",
                         PhoneNumber = "0999999999",
                         RoleId = adminRoleExisted.Id,
-                        CreatedAt = DateTime.UtcNow,
                         IsActive= true
                     }
                 };

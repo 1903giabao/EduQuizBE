@@ -33,8 +33,9 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(q => q.Category)
                 .HasMaxLength(50);
 
-            builder.Property(q => q.CreatedAt)
-                .HasDefaultValueSql("NOW()");
+            builder.Property(x => x.CreatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
 
             builder.HasOne(q => q.Teacher)
                 .WithMany(t => t.Questions)

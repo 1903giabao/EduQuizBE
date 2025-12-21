@@ -19,8 +19,9 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(a => a.Score)
                 .IsRequired();
 
-            builder.Property(a => a.SubmittedAt)
-                .HasDefaultValueSql("NOW()");
+            builder.Property(x => x.SubmittedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
 
             builder.Property(a => a.AttemptNumber)
                 .IsRequired();

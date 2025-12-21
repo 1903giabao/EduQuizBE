@@ -1,11 +1,6 @@
 ﻿using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EduQuiz.Application.UseCases.Class
 {
@@ -26,7 +21,7 @@ namespace EduQuiz.Application.UseCases.Class
 
                 if (teacher == null)
                 {
-                    throw new KeyNotFoundException($"Teacher with id {useCaseInput.TeacherId} not found");
+                    throw new KeyNotFoundException($"Teacher with id: {useCaseInput.TeacherId} not found");
                 }
             }
 
