@@ -27,7 +27,7 @@ namespace EduQuiz.Application.Auth
             if (account == null ||
                 !PasswordHasher.Verify(useCaseInput.Password, account.Password))
             {
-                throw new UnauthorizedAccessException("Invalid email or password");
+                throw new ArgumentException("Invalid email or password");
             }
 
             var accessToken = _jwtTokenGenerator.GenerateAccessToken(account);
