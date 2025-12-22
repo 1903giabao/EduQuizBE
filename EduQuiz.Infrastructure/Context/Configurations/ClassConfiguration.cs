@@ -25,14 +25,17 @@ namespace EduQuiz.Infrastructure.Context.Configurations
                 .HasMaxLength(500);
 
             builder.Property(c => c.Status)
-                .HasConversion<string>()
-                .HasColumnType("class_status")
-                .HasDefaultValue(ClassStatus.DRAFT)
                 .IsRequired();
 
             builder.Property(x => x.CreatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
+
+            builder.Property(x => x.StartTime)
+                .HasColumnType("timestamp without time zone");
+
+            builder.Property(x => x.EndTime)
+                .HasColumnType("timestamp without time zone");
 
             builder.HasOne(c => c.Teacher)
                 .WithMany(t => t.Classes)

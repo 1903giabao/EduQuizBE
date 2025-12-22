@@ -19,6 +19,10 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.Property(x => x.IsActive)
                 .HasDefaultValue(true);
 
+            builder.Property(x => x.JoinedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
+
             builder.HasOne(sc => sc.Student)
                 .WithMany(s => s.StudentClasses)
                 .HasForeignKey(sc => sc.StudentId)

@@ -1,5 +1,6 @@
 ﻿using EduQuiz.Application.Auth;
 using EduQuiz.Application.Auth.DTOs;
+using EduQuiz.Application.Auth.UseCases;
 using EduQuiz.Application.Auth.UseCases.LoginUseCase;
 using EduQuiz.Application.Common.Responses;
 using EduQuiz.Application.Common.UseCaseInvoker;
@@ -30,5 +31,12 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.RefreshAsync(refreshToken);
         return Ok(ApiResponse<TokenModel>.Ok(result));
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterUseCaseInput request)
+    {
+        var result = await UseCaseInvoker.HandleAsync<RegisterUseCaseInput, RegisterUseCaseOutput>(request);
+        return Ok(ApiResponse<RegisterUseCaseOutput>.Ok(result));
     }
 }

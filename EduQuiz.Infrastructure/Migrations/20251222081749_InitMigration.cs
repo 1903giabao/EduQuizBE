@@ -6,28 +6,51 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EduQuiz.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddClassRelatedTables : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Address",
-                table: "accounts",
-                type: "character varying(255)",
-                maxLength: 255,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "character varying(500)",
-                oldMaxLength: 500,
-                oldNullable: true);
+            migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.Id);
+                });
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsActive",
-                table: "accounts",
-                type: "boolean",
-                nullable: false,
-                defaultValue: true);
+            migrationBuilder.CreateTable(
+                name: "accounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Gender = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_accounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_accounts_roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateTable(
                 name: "students",
@@ -77,8 +100,11 @@ namespace EduQuiz.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                    TeacherId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
+                    StartTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    EndTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,7 +127,7 @@ namespace EduQuiz.Infrastructure.Migrations
                     Answer = table.Column<string[]>(type: "jsonb", nullable: false),
                     Explanation = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     Category = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
                     TeacherId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -145,9 +171,9 @@ namespace EduQuiz.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
+                    StartTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DurationMinutes = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
@@ -170,6 +196,7 @@ namespace EduQuiz.Infrastructure.Migrations
                 {
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClassId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JoinedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -197,7 +224,7 @@ namespace EduQuiz.Infrastructure.Migrations
                     ClassSlotId = table.Column<Guid>(type: "uuid", nullable: false),
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsAttended = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    MarkedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    MarkedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
                     Notes = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
@@ -250,7 +277,7 @@ namespace EduQuiz.Infrastructure.Migrations
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuizId = table.Column<Guid>(type: "uuid", nullable: false),
                     Score = table.Column<double>(type: "double precision", nullable: false),
-                    SubmittedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, defaultValueSql: "NOW()"),
+                    SubmittedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, defaultValueSql: "NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     AttemptNumber = table.Column<int>(type: "integer", nullable: false),
                     Answers = table.Column<string>(type: "jsonb", nullable: false),
@@ -274,6 +301,17 @@ namespace EduQuiz.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_accounts_Email",
+                table: "accounts",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_accounts_RoleId",
+                table: "accounts",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_attendances_ClassSlotId",
@@ -309,6 +347,12 @@ namespace EduQuiz.Infrastructure.Migrations
                 name: "IX_quizzes_ClassId",
                 table: "quizzes",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_roles_Name",
+                table: "roles",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_student_classes_ClassId",
@@ -366,20 +410,11 @@ namespace EduQuiz.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "teachers");
 
-            migrationBuilder.DropColumn(
-                name: "IsActive",
-                table: "accounts");
+            migrationBuilder.DropTable(
+                name: "accounts");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Address",
-                table: "accounts",
-                type: "character varying(500)",
-                maxLength: 500,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "character varying(255)",
-                oldMaxLength: 255,
-                oldNullable: true);
+            migrationBuilder.DropTable(
+                name: "roles");
         }
     }
 }

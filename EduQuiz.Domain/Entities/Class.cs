@@ -14,6 +14,8 @@ namespace EduQuiz.Domain.Entities
         public string? Description { get; set; }
         public ClassStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public Guid? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }
         public ICollection<ClassSlot> Slots { get; set; }

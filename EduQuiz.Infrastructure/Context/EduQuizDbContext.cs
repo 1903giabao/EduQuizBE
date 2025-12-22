@@ -32,7 +32,6 @@ namespace EduQuiz.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.HasPostgresEnum<ClassStatus>();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EduQuizDbContext).Assembly);
         }
     }

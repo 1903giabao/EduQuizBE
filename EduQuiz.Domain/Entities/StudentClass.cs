@@ -12,6 +12,7 @@ namespace EduQuiz.Domain.Entities
         public Student Student { get; set; }
         public Guid ClassId { get; set; }
         public Class Class { get; set; }
+        public DateTime JoinedAt { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }
