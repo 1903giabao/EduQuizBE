@@ -20,7 +20,6 @@ namespace EduQuiz.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_status", new[] { "DRAFT", "PUBLISHED", "UNPUBLISHED", "ONGOING", "REMOVED" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("EduQuiz.Domain.Entities.Account", b =>
@@ -138,16 +137,19 @@ namespace EduQuiz.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("class_status")
-                        .HasDefaultValue("DRAFT");
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("TeacherId")
                         .HasColumnType("uuid");
@@ -371,6 +373,11 @@ namespace EduQuiz.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
+
+                    b.Property<DateTime>("JoinedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'");
 
                     b.HasKey("StudentId", "ClassId");
 

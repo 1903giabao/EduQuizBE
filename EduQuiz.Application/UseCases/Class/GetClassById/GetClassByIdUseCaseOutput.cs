@@ -14,5 +14,6 @@ namespace EduQuiz.Application.UseCases.Class
         public DateTime CreatedAt { get; set; }
         public Guid? TeacherId { get; set; }
         public string? TeacherName { get; set; }
+        public string Status { get; set; }
     }
 }

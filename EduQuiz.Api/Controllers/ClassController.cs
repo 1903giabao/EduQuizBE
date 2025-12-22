@@ -47,6 +47,30 @@ namespace EduQuiz.Api.Controllers
             return Ok(ApiResponse<UpdateClassUseCaseOutput>.Ok(result));
         }
 
+        [HttpPut("{id}/publish")]
+        public async Task<IActionResult> PublishClass(Guid id)
+        {
+            var request = new PublishClassUseCaseInput { Id = id };
+            var result = await UseCaseInvoker.HandleAsync<PublishClassUseCaseInput, PublishClassUseCaseOutput>(request);
+            return Ok(ApiResponse<PublishClassUseCaseOutput>.Ok(result));
+        }
+
+        [HttpPost("{id}/students")]
+        public async Task<IActionResult> AddStudentToClass(Guid id, [FromBody] AddStudentToClassUseCaseInput request)
+        {
+            request.ClassId = id;
+            var result = await UseCaseInvoker.HandleAsync<AddStudentToClassUseCaseInput, AddStudentToClassUseCaseOutput>(request);
+            return Ok(ApiResponse<AddStudentToClassUseCaseOutput>.Ok(result));
+        }
+
+        [HttpDelete("{id}/students/{studentId}")]
+        public async Task<IActionResult> RemoveStudentFromClass(Guid id, Guid studentId)
+        {
+            var request = new RemoveStudentFromClassUseCaseInput { ClassId = id, StudentId = studentId };
+            var result = await UseCaseInvoker.HandleAsync<RemoveStudentFromClassUseCaseInput, RemoveStudentFromClassUseCaseOutput>(request);
+            return Ok(ApiResponse<RemoveStudentFromClassUseCaseOutput>.Ok(result));
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClass(Guid id)
         {

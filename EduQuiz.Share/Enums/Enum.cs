@@ -1,6 +1,7 @@
 ﻿using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,16 @@ namespace EduQuiz.Share.Enums
         {
             [PgName("DRAFT")]
             DRAFT,
+
             [PgName("PUBLISHED")]
             PUBLISHED,
+
             [PgName("UNPUBLISHED")]
             UNPUBLISHED,
+
             [PgName("ONGOING")]
             ONGOING,
+
             [PgName("REMOVED")]
             REMOVED
         }

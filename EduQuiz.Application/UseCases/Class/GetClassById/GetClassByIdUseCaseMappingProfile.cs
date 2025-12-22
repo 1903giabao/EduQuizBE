@@ -13,7 +13,9 @@ namespace EduQuiz.Application.UseCases.Class
         {
             CreateMap<Domain.Entities.Class, GetClassByIdUseCaseOutput>()
                 .ForMember(dest => dest.TeacherName,
-                    opt => opt.MapFrom(src => src.Teacher == null ? null : src.Teacher.Account.LastName + " " + src.Teacher.Account.FirstName));
+                    opt => opt.MapFrom(src => src.Teacher == null ? null : src.Teacher.Account.LastName + " " + src.Teacher.Account.FirstName))
+                .ForMember(dest => dest.Status,
+                    opt => opt.MapFrom(src => src.Status.ToString()));
         }
     }
 }

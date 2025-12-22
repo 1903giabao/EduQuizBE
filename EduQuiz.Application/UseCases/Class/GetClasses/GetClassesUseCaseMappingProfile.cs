@@ -15,7 +15,9 @@ namespace EduQuiz.Application.UseCases.Class
                 .ForMember(dest => dest.TeacherId,
                     opt => opt.MapFrom(src => src.Teacher != null ? src.Teacher.AccountId : (Guid?)null))
                 .ForMember(dest => dest.TeacherName,
-                    opt => opt.MapFrom(src => src.Teacher != null && src.Teacher.Account != null  ? $"{src.Teacher.Account.LastName} {src.Teacher.Account.FirstName}" : null));
+                    opt => opt.MapFrom(src => src.Teacher != null && src.Teacher.Account != null  ? $"{src.Teacher.Account.LastName} {src.Teacher.Account.FirstName}" : null))
+                .ForMember(dest => dest.Status,
+                    opt => opt.MapFrom(src => src.Status.ToString()));
         }
     }
 }
