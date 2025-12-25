@@ -11,6 +11,8 @@
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
+	<PackageReference Include="DocxTemplater" Version="2.5.0" />
+	<PackageReference Include="DocxTemplater.Images" Version="2.5.0" />
   </ItemGroup>
 
   <PropertyGroup>
