@@ -32,5 +32,12 @@ namespace EduQuiz.Api.Controllers
             var result = await UseCaseInvoker.HandleAsync<GetTeacherByIdUseCaseInput, GetTeacherByIdUseCaseOutput>(request);
             return Ok(ApiResponse<GetTeacherByIdUseCaseOutput>.Ok(result));
         }
+
+        [HttpPost("academic-reports/print")]
+        public async Task<IActionResult> PrintAcademicReport([FromBody] PrintAcademicReportUseCaseInput request)
+        {
+            var result = await UseCaseInvoker.HandleAsync<PrintAcademicReportUseCaseInput, PrintAcademicReportUseCaseOutput>(request);
+            return Ok(ApiResponse<PrintAcademicReportUseCaseOutput>.Ok(result));
+        }
     }
 }

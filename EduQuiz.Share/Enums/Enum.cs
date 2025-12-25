@@ -27,5 +27,10 @@ namespace EduQuiz.Share.Enums
             [PgName("REMOVED")]
             REMOVED
         }
+
+        public enum GroupCodeEnum 
+        {
+            ACADEMIC_REPORT
+        }
     }
 }
