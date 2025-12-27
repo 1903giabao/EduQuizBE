@@ -6,6 +6,6 @@ namespace EduQuiz.Application.UseCases.ClassSlot
     {
         public Guid? TeacherId { get; set; }
         public Guid? StudentId { get; set; }
-        public DateTime? Date { get; set; }
+        public string? Date { get; set; }
     }
 }

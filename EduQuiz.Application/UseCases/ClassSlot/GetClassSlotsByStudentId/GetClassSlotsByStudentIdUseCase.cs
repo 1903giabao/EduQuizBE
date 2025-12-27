@@ -39,14 +39,13 @@ namespace EduQuiz.Application.UseCases.ClassSlot
                 );
             }
 
-            var date = useCaseInput.Date?.Date;
-            var nextDate = date?.AddDays(1);
-
-            if (date.HasValue)
+            if (DateTime.TryParse(useCaseInput.Date, out var datetime))
             {
+                var date = datetime.Date;
+                var nextDate = datetime.Date.AddDays(1);
                 classSlotsQuery = classSlotsQuery.Where(s =>
-                    s.StartTime >= date.Value &&
-                    s.StartTime < nextDate!.Value
+                    s.StartTime >= date &&
+                    s.StartTime < nextDate
                 );
             }
 
