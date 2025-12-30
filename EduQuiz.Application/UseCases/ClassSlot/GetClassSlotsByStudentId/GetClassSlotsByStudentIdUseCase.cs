@@ -49,9 +49,20 @@ namespace EduQuiz.Application.UseCases.ClassSlot
                 );
             }
 
+            if (DateTime.TryParse(useCaseInput.StartDate, out var startDatetime) &&
+                DateTime.TryParse(useCaseInput.EndDate, out var endDatetime))
+            {
+                var date = startDatetime.Date;
+                var endDate = endDatetime.Date.AddDays(1);
+                classSlotsQuery = classSlotsQuery.Where(s =>
+                    s.StartTime >= date &&
+                    s.StartTime < endDate
+                );
+            }
+
             var classSlots = await classSlotsQuery.ToListAsync();
 
-            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByStudentIdUseCaseOutput>>(classSlots);
+            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByStudentIdUseCaseOutput>>(classSlots.OrderBy(x => x.StartTime));
 
             return mappedClassSlots;
         }
