@@ -1,5 +1,7 @@
 ﻿using EduQuiz.Application.Common.IUseCase;
+using EduQuiz.Domain.Entities;
 using EduQuiz.Infrastructure.UnitOfWork;
+using EduQuiz.Share.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduQuiz.Application.UseCases.Class
@@ -34,6 +36,31 @@ namespace EduQuiz.Application.UseCases.Class
             };
 
             await _unitOfWork.Classes.AddAsync(newClass);
+
+            var newSlots = new List<Domain.Entities.ClassSlot>();
+            foreach (var slotTime in useCaseInput.SlotInDays)
+            {
+                var datesInTimeRange = DayExtension.ExtractDateByDayAndTimeRange(useCaseInput.StartDate, useCaseInput.EndDate, slotTime.Day);
+
+                foreach (var date in datesInTimeRange)
+                {
+                    var startTime = new DateTime(date: date, time: slotTime.StartSlotTime);
+                    var endTime = new DateTime(date: date, time: slotTime.EndSlotTime);
+                    var newSlot = new Domain.Entities.ClassSlot
+                    {
+                        ClassId = newClass.Id,
+                        StartTime = startTime,
+                        EndTime = endTime,
+                        Location = slotTime.Location,
+                        Description = string.Empty
+                    };
+
+                    newSlots.Add(newSlot);
+                }
+            }
+
+            await _unitOfWork.ClassSlots.AddRangeAsync(newSlots);
+
             await _unitOfWork.SaveChangesAsync();
 
             return new CreateClassUseCaseOutput();

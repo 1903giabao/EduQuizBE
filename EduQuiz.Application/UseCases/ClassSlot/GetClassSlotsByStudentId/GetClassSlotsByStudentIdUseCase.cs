@@ -28,7 +28,8 @@ namespace EduQuiz.Application.UseCases.ClassSlot
                     s.Class.StudentClasses.Any(sc =>
                         sc.Student.AccountId == useCaseInput.StudentId &&
                         sc.Student.Account.IsActive
-                    )
+                    ) && 
+                    s.Class.Status == Share.Enums.Enum.ClassStatus.PUBLISHED
                 );
 
             if (useCaseInput.TeacherId.HasValue)
