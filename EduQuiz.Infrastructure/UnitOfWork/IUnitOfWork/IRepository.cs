@@ -12,6 +12,7 @@ namespace EduQuiz.Infrastructure.UnitOfWork
         Task<T?> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
         Task AddAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
         void Update(T entity);
         void Remove(T entity);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);

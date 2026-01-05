@@ -26,6 +26,8 @@ namespace EduQuiz.Infrastructure.UnitOfWork
 
         public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
+        public async Task AddRangeAsync(IEnumerable<T> entities) => await _dbSet.AddRangeAsync(entities);
+
         public void Update(T entity) => _dbSet.Update(entity);
 
         public void Remove(T entity) => _dbSet.Remove(entity);

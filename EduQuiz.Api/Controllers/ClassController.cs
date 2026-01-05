@@ -63,6 +63,14 @@ namespace EduQuiz.Api.Controllers
             return Ok(ApiResponse<AddStudentToClassUseCaseOutput>.Ok(result));
         }
 
+        [HttpPost("{id}/teachers")]
+        public async Task<IActionResult> AddTeacherToClass(Guid id, [FromBody] AddTeacerToClassUseCaseInput request)
+        {
+            request.ClassId = id;
+            var result = await UseCaseInvoker.HandleAsync<AddTeacerToClassUseCaseInput, AddTeacerToClassUseCaseOutput>(request);
+            return Ok(ApiResponse<AddTeacerToClassUseCaseOutput>.Ok(result));
+        }
+
         [HttpDelete("{id}/students/{studentId}")]
         public async Task<IActionResult> RemoveStudentFromClass(Guid id, Guid studentId)
         {
