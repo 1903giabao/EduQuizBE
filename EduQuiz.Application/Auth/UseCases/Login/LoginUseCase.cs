@@ -1,6 +1,4 @@
-﻿using EduQuiz.Application.Auth.DTOs;
-using EduQuiz.Application.Auth.UseCases.LoginUseCase;
-using EduQuiz.Application.Common.IUseCase;
+﻿using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.Security;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -35,13 +33,16 @@ namespace EduQuiz.Application.Auth
 
             return new LoginUseCaseOutput
             {
-                Token = new TokenModel
+                Token = new DTOs.TokenModel
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken
                 },
-                Role = account.Role.Name,
-                AccountId = account.Id
+                Response = new LoginResponse
+                {
+                    AccountId = account.Id,
+                    Role = account.Role.Name
+                }
             };
         }
     }
