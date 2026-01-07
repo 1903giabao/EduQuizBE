@@ -1,4 +1,4 @@
-﻿namespace EduQuiz.Application.Auth.UseCases.LoginUseCase
+﻿namespace EduQuiz.Application.Auth
 {
     public class LoginUseCaseInput
     {
