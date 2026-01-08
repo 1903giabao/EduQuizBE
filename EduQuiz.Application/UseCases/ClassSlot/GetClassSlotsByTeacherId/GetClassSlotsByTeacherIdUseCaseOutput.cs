@@ -1,14 +1,14 @@
 ﻿using EduQuiz.Application.Common.Responses;
 
-namespace EduQuiz.Application.UseCases.ClassSlot
+namespace EduQuiz.Application.UseCases
 {
-    public class GetClassSlotsByStudentIdUseCaseOutput
+    public class GetClassSlotsByTeacherIdUseCaseOutput
     {
-        public List<GetClassSlotsByStudentIdUseCaseResponse> Response { get; set; }
+        public List<GetClassSlotsByTeacherIdUseCaseResponse> Response {  get; set; }
         public ApiMeta Meta { get; set; }
     }
 
-    public class GetClassSlotsByStudentIdUseCaseResponse
+    public class GetClassSlotsByTeacherIdUseCaseResponse
     {
         public Guid Id { get; set; }
         public string ClassName { get; set; }

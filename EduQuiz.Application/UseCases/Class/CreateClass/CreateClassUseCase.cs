@@ -17,6 +17,14 @@ namespace EduQuiz.Application.UseCases.Class
 
         public async Task<CreateClassUseCaseOutput> HandleAsync(CreateClassUseCaseInput useCaseInput)
         {
+            var newClass = new Domain.Entities.Class
+            {
+                Name = useCaseInput.Name,
+                Description = useCaseInput.Description,
+                TeacherId = null,
+                Status = Share.Enums.Enum.ClassStatus.DRAFT,
+            };
+
             if (useCaseInput.TeacherId != null)
             {
                 var teacher = await _unitOfWork.Teachers.Query().FirstOrDefaultAsync(t => t.AccountId == useCaseInput.TeacherId);
@@ -25,15 +33,8 @@ namespace EduQuiz.Application.UseCases.Class
                 {
                     throw new KeyNotFoundException($"Teacher with id: {useCaseInput.TeacherId} not found");
                 }
+                newClass.TeacherId = teacher.Id;
             }
-
-            var newClass = new Domain.Entities.Class
-            {
-                Name = useCaseInput.Name,
-                Description = useCaseInput.Description,
-                TeacherId = useCaseInput.TeacherId,
-                Status = Share.Enums.Enum.ClassStatus.DRAFT,
-            };
 
             await _unitOfWork.Classes.AddAsync(newClass);
 

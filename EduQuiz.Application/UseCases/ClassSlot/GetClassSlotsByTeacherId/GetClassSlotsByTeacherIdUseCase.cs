@@ -1,54 +1,32 @@
 ﻿using AutoMapper;
 using EduQuiz.Application.Common.IUseCase;
-using EduQuiz.Domain.Entities;
+using EduQuiz.Application.UseCases.ClassSlot;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
-namespace EduQuiz.Application.UseCases.ClassSlot
+namespace EduQuiz.Application.UseCases
 {
-    public class GetClassSlotsByStudentIdUseCase : IUseCase<GetClassSlotsByStudentIdUseCaseInput, GetClassSlotsByStudentIdUseCaseOutput>
+    public class GetClassSlotsByTeacherIdUseCase : IUseCase<GetClassSlotsByTeacherIdUseCaseInput, GetClassSlotsByTeacherIdUseCaseOutput>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetClassSlotsByStudentIdUseCase(IUnitOfWork unitOfWork, IMapper mapper)
+        public GetClassSlotsByTeacherIdUseCase(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<GetClassSlotsByStudentIdUseCaseOutput> HandleAsync(GetClassSlotsByStudentIdUseCaseInput useCaseInput)
+        public async Task<GetClassSlotsByTeacherIdUseCaseOutput> HandleAsync(GetClassSlotsByTeacherIdUseCaseInput useCaseInput)
         {
             var classSlotsQuery = _unitOfWork.ClassSlots.Query()
                 .Include(x => x.Class)
                     .ThenInclude(x => x.Teacher)
                         .ThenInclude(x => x.Account)
                 .Where(s =>
-                    s.Class.StudentClasses.Any(sc =>
-                        sc.Student.AccountId == useCaseInput.StudentId &&
-                        sc.Student.Account.IsActive
-                    ) && 
+                    s.Class.Teacher.AccountId == useCaseInput.TeacherId &&
                     s.Class.Status == Share.Enums.Enum.ClassStatus.PUBLISHED
                 );
-
-            if (useCaseInput.TeacherId.HasValue)
-            {
-                classSlotsQuery = classSlotsQuery.Where(s =>
-                    s.Class.Teacher != null &&
-                    s.Class.Teacher.AccountId == useCaseInput.TeacherId
-                );
-            }
-
-            if (DateTime.TryParse(useCaseInput.Date, out var datetime))
-            {
-                var date = datetime.Date;
-                var nextDate = datetime.Date.AddDays(1);
-                classSlotsQuery = classSlotsQuery.Where(s =>
-                    s.StartTime >= date &&
-                    s.StartTime < nextDate
-                );
-            }
 
             if (DateTime.TryParse(useCaseInput.StartDate, out var startDatetime) &&
                 DateTime.TryParse(useCaseInput.EndDate, out var endDatetime))
@@ -69,9 +47,9 @@ namespace EduQuiz.Application.UseCases.ClassSlot
                 .Take(useCaseInput.PageSize)
                 .ToListAsync();
 
-            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByStudentIdUseCaseResponse>>(classSlots.OrderBy(x => x.StartTime));
+            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByTeacherIdUseCaseResponse>>(classSlots.OrderBy(x => x.StartTime));
 
-            return new GetClassSlotsByStudentIdUseCaseOutput
+            return new GetClassSlotsByTeacherIdUseCaseOutput
             {
                 Response = mappedClassSlots,
                 Meta = new Common.Responses.ApiMeta

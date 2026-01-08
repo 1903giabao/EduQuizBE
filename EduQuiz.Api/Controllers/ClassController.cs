@@ -14,14 +14,8 @@ namespace EduQuiz.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetClasses([FromQuery] GetClassesUseCaseInput request)
         {
-            var result = await UseCaseInvoker.HandleAsync<GetClassesUseCaseInput, List<GetClassesUseCaseOutput>>(request);
-            var meta = new ApiMeta
-            {
-                Page = request.Page,
-                PageSize = request.PageSize,
-                TotalItems = result.Count,
-            };
-            return Ok(ApiResponse<List<GetClassesUseCaseOutput>>.Ok(result, meta));
+            var result = await UseCaseInvoker.HandleAsync<GetClassesUseCaseInput, GetClassesUseCaseOutput>(request);
+            return Ok(ApiResponse<List<GetClassesUseCaseResponse>>.Ok(result.Response, result.Meta));
         }
 
         [HttpGet("{id}")]

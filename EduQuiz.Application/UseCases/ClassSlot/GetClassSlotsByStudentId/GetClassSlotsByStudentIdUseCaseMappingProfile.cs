@@ -7,7 +7,7 @@ namespace EduQuiz.Application.UseCases.ClassSlot
     {
         public GetClassSlotsByStudentIdUseCaseMappingProfile() 
         {
-            CreateMap<Domain.Entities.ClassSlot, GetClassSlotsByStudentIdUseCaseOutput>()
+            CreateMap<Domain.Entities.ClassSlot, GetClassSlotsByStudentIdUseCaseResponse>()
                 .ForMember(dest => dest.ClassName,
                     opt => opt.MapFrom(src => src.Class != null ? src.Class.Name : string.Empty))
                 .ForMember(dest => dest.TeacherName,
