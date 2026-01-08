@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EduQuiz.Application.UseCases.Class
 {
-    public class GetClassesUseCase : IUseCase<GetClassesUseCaseInput, List<GetClassesUseCaseOutput>>
+    public class GetClassesUseCase : IUseCase<GetClassesUseCaseInput, GetClassesUseCaseOutput>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ namespace EduQuiz.Application.UseCases.Class
             _mapper = mapper;
         }
 
-        public async Task<List<GetClassesUseCaseOutput>> HandleAsync(GetClassesUseCaseInput useCaseInput)
+        public async Task<GetClassesUseCaseOutput> HandleAsync(GetClassesUseCaseInput useCaseInput)
         {
             var query = _unitOfWork.Classes.Query()
                 .Include(x => x.Teacher)
@@ -54,9 +54,18 @@ namespace EduQuiz.Application.UseCases.Class
                 .Take(useCaseInput.PageSize)
                 .ToListAsync();
 
-            var mappedClasses = _mapper.Map<List<GetClassesUseCaseOutput>>(classes);
+            var mappedClasses = _mapper.Map<List<GetClassesUseCaseResponse>>(classes);
 
-            return mappedClasses;
+            return new GetClassesUseCaseOutput
+            {
+                Response = mappedClasses,
+                Meta = new Common.Responses.ApiMeta
+                {
+                    Page = useCaseInput.Page,
+                    PageSize = useCaseInput.PageSize,
+                    TotalItems = totalItems
+                }
+            };
         }
     }
 }

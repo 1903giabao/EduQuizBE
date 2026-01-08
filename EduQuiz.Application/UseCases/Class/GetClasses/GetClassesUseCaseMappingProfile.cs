@@ -11,13 +11,15 @@ namespace EduQuiz.Application.UseCases.Class
     {
         public GetClassesUseCaseMappingProfile()
         {
-            CreateMap<Domain.Entities.Class, GetClassesUseCaseOutput>()
+            CreateMap<Domain.Entities.Class, GetClassesUseCaseResponse>()
                 .ForMember(dest => dest.TeacherId,
                     opt => opt.MapFrom(src => src.Teacher != null ? src.Teacher.AccountId : (Guid?)null))
                 .ForMember(dest => dest.TeacherName,
                     opt => opt.MapFrom(src => src.Teacher != null && src.Teacher.Account != null  ? $"{src.Teacher.Account.LastName} {src.Teacher.Account.FirstName}" : null))
                 .ForMember(dest => dest.Status,
-                    opt => opt.MapFrom(src => src.Status.ToString()));
+                    opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.NumOfStudents,
+                    opt => opt.MapFrom(src => src.StudentClasses.Distinct().Count()));
         }
     }
 }
