@@ -18,7 +18,15 @@ namespace EduQuiz.Application.UseCases.Class
 
         public async Task<GetClassByIdUseCaseOutput> HandleAsync(GetClassByIdUseCaseInput useCaseInput)
         {
-            var classExisting = await _unitOfWork.Classes.Query().FirstOrDefaultAsync(x => x.Id == useCaseInput.Id);
+            var classExisting = await _unitOfWork.Classes.Query()
+                .Include(x => x.Teacher)
+                    .ThenInclude(x => x.Account)
+                .Include(x => x.StudentClasses)
+                    .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.Account)
+                .Include(x => x.Slots)
+                .Include(x => x.Quizzes)
+                .FirstOrDefaultAsync(x => x.Id == useCaseInput.Id);
 
             var mappedClass = _mapper.Map<GetClassByIdUseCaseOutput>(classExisting);
 
