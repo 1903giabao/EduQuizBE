@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EduQuiz.Share.Extensions
 {
@@ -22,6 +23,34 @@ namespace EduQuiz.Share.Extensions
             }
 
             return result;
+        }
+        public static string ToDayOfWeek(DateTime date)
+        {
+            return date.DayOfWeek switch
+            {
+                DayOfWeek.Sunday => "Sunday",
+                DayOfWeek.Monday => "Monday",
+                DayOfWeek.Tuesday => "Tuesday",
+                DayOfWeek.Wednesday => "Wednesday",
+                DayOfWeek.Thursday => "Thursday",
+                DayOfWeek.Friday => "Friday",
+                DayOfWeek.Saturday => "Saturday",
+                _ => string.Empty
+            };
+        }
+        public static string ToDayOfWeek3Letters(DateTime date)
+        {
+            return date.DayOfWeek switch
+            {
+                DayOfWeek.Sunday => "Sun",
+                DayOfWeek.Monday => "Mon",
+                DayOfWeek.Tuesday => "Tue",
+                DayOfWeek.Wednesday => "Wed",
+                DayOfWeek.Thursday => "Thu",
+                DayOfWeek.Friday => "Fri",
+                DayOfWeek.Saturday => "Sat",
+                _ => string.Empty
+            };
         }
     }
 }
