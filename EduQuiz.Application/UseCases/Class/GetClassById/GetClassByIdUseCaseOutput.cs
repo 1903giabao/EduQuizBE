@@ -43,7 +43,6 @@ namespace EduQuiz.Application.UseCases.Class
 
     public class ScheduleOfClass
     {
-        public string Day { get; set; }
         public string Location { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
