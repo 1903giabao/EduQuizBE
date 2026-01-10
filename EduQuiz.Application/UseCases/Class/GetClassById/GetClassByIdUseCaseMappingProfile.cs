@@ -23,7 +23,7 @@ namespace EduQuiz.Application.UseCases.Class
                 .ForMember(dest => dest.QuizOfClasses,
                     opt => opt.MapFrom(src => src.Quizzes))
                 .ForMember(dest => dest.ScheduleOfClasses,
-                    opt => opt.MapFrom(src => src.Slots));
+                    opt => opt.MapFrom(src => src.Slots.OrderBy(x => x.StartTime)));
 
             CreateMap<Domain.Entities.Student, StudentInClass>()
                 .ForMember(dest => dest.FirstName,
@@ -37,9 +37,7 @@ namespace EduQuiz.Application.UseCases.Class
 
             CreateMap<Domain.Entities.Quiz, QuizOfClass>();
 
-            CreateMap<Domain.Entities.ClassSlot, ScheduleOfClass>()
-                .ForMember(dest => dest.Day,
-                    opt => opt.MapFrom(src => DayExtension.ToDayOfWeek(src.StartTime)));
+            CreateMap<Domain.Entities.ClassSlot, ScheduleOfClass>();
 
         }
     }
