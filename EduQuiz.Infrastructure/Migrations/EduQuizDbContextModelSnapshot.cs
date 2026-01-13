@@ -32,6 +32,9 @@ namespace EduQuiz.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
@@ -345,7 +348,7 @@ namespace EduQuiz.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
-                    b.Property<string>("ParentPhoneNumer")
+                    b.Property<string>("ParentPhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 

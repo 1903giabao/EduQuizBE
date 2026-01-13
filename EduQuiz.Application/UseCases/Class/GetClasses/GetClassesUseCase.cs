@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +19,7 @@ namespace EduQuiz.Application.UseCases.Class
 
         public async Task<GetClassesUseCaseOutput> HandleAsync(GetClassesUseCaseInput useCaseInput)
         {
-            var query = _unitOfWork.Classes.Query()
-                .Include(x => x.Teacher)
-                    .ThenInclude(x => x.Account)
-                .Include(x => x.StudentClasses)
-                    .ThenInclude(x => x.Student)
-                .AsQueryable();
+            var query = _unitOfWork.Classes.Query();
 
             if (!string.IsNullOrWhiteSpace(useCaseInput.Keyword))
             {
@@ -52,13 +48,12 @@ namespace EduQuiz.Application.UseCases.Class
                 .OrderBy(x => x.Name)
                 .Skip((useCaseInput.Page - 1) * useCaseInput.PageSize)
                 .Take(useCaseInput.PageSize)
+                .ProjectTo<GetClassesUseCaseResponse>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-
-            var mappedClasses = _mapper.Map<List<GetClassesUseCaseResponse>>(classes);
 
             return new GetClassesUseCaseOutput
             {
-                Response = mappedClasses,
+                Response = classes,
                 Meta = new Common.Responses.ApiMeta
                 {
                     Page = useCaseInput.Page,

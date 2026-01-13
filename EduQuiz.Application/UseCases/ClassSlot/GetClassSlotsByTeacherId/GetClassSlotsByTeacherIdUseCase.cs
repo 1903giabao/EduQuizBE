@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Application.UseCases.ClassSlot;
 using EduQuiz.Infrastructure.UnitOfWork;
@@ -20,10 +21,8 @@ namespace EduQuiz.Application.UseCases
         public async Task<GetClassSlotsByTeacherIdUseCaseOutput> HandleAsync(GetClassSlotsByTeacherIdUseCaseInput useCaseInput)
         {
             var classSlotsQuery = _unitOfWork.ClassSlots.Query()
-                .Include(x => x.Class)
-                    .ThenInclude(x => x.Teacher)
-                        .ThenInclude(x => x.Account)
-                .Where(s =>
+                .Where(s => 
+                    s.Class.Teacher != null &&
                     s.Class.Teacher.AccountId == useCaseInput.TeacherId &&
                     s.Class.Status == Share.Enums.Enum.ClassStatus.PUBLISHED
                 );
@@ -45,13 +44,12 @@ namespace EduQuiz.Application.UseCases
                 .OrderBy(x => x.StartTime)
                 .Skip((useCaseInput.Page - 1) * useCaseInput.PageSize)
                 .Take(useCaseInput.PageSize)
+                .ProjectTo<GetClassSlotsByTeacherIdUseCaseResponse>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-
-            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByTeacherIdUseCaseResponse>>(classSlots.OrderBy(x => x.StartTime));
 
             return new GetClassSlotsByTeacherIdUseCaseOutput
             {
-                Response = mappedClassSlots,
+                Response = classSlots.OrderBy(x => x.StartTime).ToList(),
                 Meta = new Common.Responses.ApiMeta
                 {
                     Page = useCaseInput.Page,

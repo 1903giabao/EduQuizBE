@@ -16,7 +16,7 @@ namespace EduQuiz.Infrastructure.Context.Configurations
             builder.ToTable("students");
             builder.HasKey(s => s.Id);
 
-            builder.Property(q => q.ParentPhoneNumer)
+            builder.Property(q => q.ParentPhoneNumber)
                 .HasMaxLength(20);
 
             builder.Property(q => q.Grade)

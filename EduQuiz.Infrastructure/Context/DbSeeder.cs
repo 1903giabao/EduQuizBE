@@ -106,7 +106,7 @@ namespace EduQuiz.Infrastructure.Context
                         Id = Guid.NewGuid(),
                         AccountId = studentAccount.Id,
                         Grade = "10",
-                        ParentPhoneNumer = "0909898989",
+                        ParentPhoneNumber = "0909898989",
                         School = "Binh Phu Highschool"                       
                     };
 

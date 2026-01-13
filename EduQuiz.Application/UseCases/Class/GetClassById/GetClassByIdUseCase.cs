@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +20,16 @@ namespace EduQuiz.Application.UseCases.Class
         public async Task<GetClassByIdUseCaseOutput> HandleAsync(GetClassByIdUseCaseInput useCaseInput)
         {
             var classExisting = await _unitOfWork.Classes.Query()
-                .Include(x => x.Teacher)
-                    .ThenInclude(x => x.Account)
-                .Include(x => x.StudentClasses)
-                    .ThenInclude(x => x.Student)
-                        .ThenInclude(x => x.Account)
-                .Include(x => x.Slots)
-                .Include(x => x.Quizzes)
-                .FirstOrDefaultAsync(x => x.Id == useCaseInput.Id);
+                .Where(x => x.Id == useCaseInput.Id)
+                .ProjectTo<GetClassByIdUseCaseOutput>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
 
-            var mappedClass = _mapper.Map<GetClassByIdUseCaseOutput>(classExisting);
+            if (classExisting == null)
+            {
+                throw new KeyNotFoundException($"Class with id: {useCaseInput.Id} not found");
+            }
 
-            return mappedClass;
+            return classExisting;
         }
     }
 }

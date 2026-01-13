@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EduQuiz.Application.Common.IUseCase;
 using EduQuiz.Domain.Entities;
 using EduQuiz.Infrastructure.UnitOfWork;
@@ -21,9 +22,6 @@ namespace EduQuiz.Application.UseCases.ClassSlot
         public async Task<GetClassSlotsByStudentIdUseCaseOutput> HandleAsync(GetClassSlotsByStudentIdUseCaseInput useCaseInput)
         {
             var classSlotsQuery = _unitOfWork.ClassSlots.Query()
-                .Include(x => x.Class)
-                    .ThenInclude(x => x.Teacher)
-                        .ThenInclude(x => x.Account)
                 .Where(s =>
                     s.Class.StudentClasses.Any(sc =>
                         sc.Student.AccountId == useCaseInput.StudentId &&
@@ -67,13 +65,12 @@ namespace EduQuiz.Application.UseCases.ClassSlot
                 .OrderBy(x => x.StartTime)
                 .Skip((useCaseInput.Page - 1) * useCaseInput.PageSize)
                 .Take(useCaseInput.PageSize)
+                .ProjectTo<GetClassSlotsByStudentIdUseCaseResponse>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-
-            var mappedClassSlots = _mapper.Map<List<GetClassSlotsByStudentIdUseCaseResponse>>(classSlots.OrderBy(x => x.StartTime));
 
             return new GetClassSlotsByStudentIdUseCaseOutput
             {
-                Response = mappedClassSlots,
+                Response = classSlots.OrderBy(x => x.StartTime).ToList(),
                 Meta = new Common.Responses.ApiMeta
                 {
                     Page = useCaseInput.Page,
