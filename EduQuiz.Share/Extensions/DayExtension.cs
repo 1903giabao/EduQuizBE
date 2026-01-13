@@ -24,6 +24,19 @@ namespace EduQuiz.Share.Extensions
 
             return result;
         }
+        public static List<string> ToListDayFormat(List<DateTime> dates)
+        {
+            var result = new List<string>();
+            foreach (var date in dates)
+            {
+                var stringDayOfWeek = ToDayOfWeek3Letters(date);
+                var newDayString = stringDayOfWeek + " " + date.ToString("HH:mm");
+                if (!result.Contains(newDayString))
+                    result.Add(newDayString);
+            }
+
+            return result;
+        }
         public static string ToDayOfWeek(DateTime date)
         {
             return date.DayOfWeek switch

@@ -11,7 +11,7 @@ namespace EduQuiz.Domain.Entities
         public Guid Id { get; set; }
         public Guid AccountId { get; set; }
         public Account Account { get; set; }
-        public string? ParentPhoneNumer { get; set; }
+        public string? ParentPhoneNumber { get; set; }
         public string? Grade { get; set; }
         public string? School { get; set; }
         public ICollection<StudentClass> StudentClasses { get; set; }

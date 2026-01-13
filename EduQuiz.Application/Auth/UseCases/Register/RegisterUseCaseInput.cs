@@ -13,7 +13,7 @@
         public bool IsTeacherRegistration { get; set; }
         public string? Bio { get; set; }
         public string? Department { get; set; }
-        public string? ParentPhoneNumer { get; set; }
+        public string? ParentPhoneNumber { get; set; }
         public string? Grade { get; set; }
         public string? School { get; set; }
     }

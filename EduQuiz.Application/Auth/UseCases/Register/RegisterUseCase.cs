@@ -62,7 +62,7 @@ namespace EduQuiz.Application.Auth.UseCases
                 {
                     AccountId = newAccount.Id,
                     Grade = useCaseInput.Grade,
-                    ParentPhoneNumer = useCaseInput.ParentPhoneNumer,
+                    ParentPhoneNumber = useCaseInput.ParentPhoneNumber,
                     School = useCaseInput.School,
                 };
 

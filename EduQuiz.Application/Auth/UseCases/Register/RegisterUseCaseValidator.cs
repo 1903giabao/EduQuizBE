@@ -57,7 +57,7 @@ namespace EduQuiz.Application.Auth.UseCases
                 RuleFor(x => x.School)
                     .NotEmpty().WithMessage("School is required for students");
 
-                RuleFor(x => x.ParentPhoneNumer)
+                RuleFor(x => x.ParentPhoneNumber)
                     .NotEmpty().WithMessage("Parent phone number is required for students")
                     .Matches(@"^\+?[0-9]{9,15}$")
                     .WithMessage("Invalid parent phone number format");
