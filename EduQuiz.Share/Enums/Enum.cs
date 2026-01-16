@@ -40,4 +40,10 @@ namespace EduQuiz.Share.Enums
         public const string TEACHER = "Teacher";
         public const string STUDENT = "Student";
     }
+
+    public static class FileStorageEnum
+    {
+        public const string DEFAULT_BUCKET = "bucket";
+        public const string BUCKET_KEY_AVATAR = "avatars";
+    }
 }
