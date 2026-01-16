@@ -1,6 +1,7 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using EduQuiz.Infrastructure.Security;
+using EduQuiz.Infrastructure.Services.FileStorageService.DTOs;
 using Microsoft.Extensions.Options;
 
 namespace EduQuiz.Infrastructure.Services.FileStorageService
@@ -33,6 +34,30 @@ namespace EduQuiz.Infrastructure.Services.FileStorageService
             };
 
             await _s3.PutObjectAsync(request, cancellationToken);
+        }
+
+        public async Task<FileResult> GetFileAsync(
+            string fileName,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await _s3.GetObjectAsync(
+                    _options.Bucket,
+                    fileName,
+                    cancellationToken);
+
+                return new FileResult
+                {
+                    Content = response.ResponseStream,
+                    ContentType = response.Headers.ContentType,
+                    ContentLength = response.Headers.ContentLength
+                };
+            }
+            catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw new FileNotFoundException($"File '{fileName}' not found.");
+            }
         }
 
         public Task<string> GetPresignedUrlAsync(string fileName, TimeSpan expiresIn)
