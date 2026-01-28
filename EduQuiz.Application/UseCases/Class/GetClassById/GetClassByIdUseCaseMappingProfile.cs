@@ -26,6 +26,8 @@ namespace EduQuiz.Application.UseCases.Class
                     opt => opt.MapFrom(src => src.Slots.OrderBy(x => x.StartTime)));
 
             CreateMap<Domain.Entities.Student, StudentInClass>()
+                .ForMember(dest => dest.Avatar,
+                    opt => opt.MapFrom(src => src.Account.Avatar))
                 .ForMember(dest => dest.FirstName,
                     opt => opt.MapFrom(src => src.Account.FirstName))
                 .ForMember(dest => dest.LastName,

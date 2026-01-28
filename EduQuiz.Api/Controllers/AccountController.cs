@@ -21,9 +21,9 @@ namespace EduQuiz.Api.Controllers
         }
 
         [HttpPut("profile/avatar/{id}")]
-        public async Task<IActionResult> UpdateAccountAvatar([FromRoute] Guid id, [FromForm] IFormFile file)
+        public async Task<IActionResult> UpdateAccountAvatar([FromRoute] Guid id, [FromForm] UpdateAccountAvatarFormRequest formRequest)
         {
-            var request = new UpdateAccountAvatarUseCaseInput { Id = id, Avatar = file };
+            var request = new UpdateAccountAvatarUseCaseInput { Id = id, Avatar = formRequest.Avatar };
             var result = await UseCaseInvoker.HandleAsync<UpdateAccountAvatarUseCaseInput, UpdateAccountAvatarUseCaseOutput>(request);
             return Ok(ApiResponse<UpdateAccountAvatarUseCaseOutput>.Ok(result));
         }

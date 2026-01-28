@@ -10,6 +10,8 @@ namespace EduQuiz.Application.UseCases.Account
             var now = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
             CreateMap<Domain.Entities.Student, GetUserProfileUseCaseOutput>()
+                .ForMember(dest => dest.Avatar,
+                    opt => opt.MapFrom(src => src.Account.Avatar))
                 .ForMember(dest => dest.FirstName,
                     opt => opt.MapFrom(src => src.Account.FirstName))
                 .ForMember(dest => dest.LastName,
@@ -32,6 +34,8 @@ namespace EduQuiz.Application.UseCases.Account
                     opt => opt.MapFrom(src => src.StudentQuizzes.Where(x => !x.IsCompleted && now > x.Quiz.StartTime && now < x.Quiz.EndTime).Distinct().Count()));
 
             CreateMap<Domain.Entities.Teacher, GetUserProfileUseCaseOutput>()
+                .ForMember(dest => dest.Avatar,
+                    opt => opt.MapFrom(src => src.Account.Avatar))
                 .ForMember(dest => dest.FirstName,
                     opt => opt.MapFrom(src => src.Account.FirstName))
                 .ForMember(dest => dest.LastName,

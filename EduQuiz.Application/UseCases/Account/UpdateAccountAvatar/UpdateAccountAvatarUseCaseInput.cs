@@ -7,4 +7,8 @@ namespace EduQuiz.Application.UseCases.Account
         public Guid Id { get; set; }
         public IFormFile Avatar { get; set; }
     }
+    public class UpdateAccountAvatarFormRequest
+    {
+        public IFormFile Avatar { get; set; }
+    }
 }
