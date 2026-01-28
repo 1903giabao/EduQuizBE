@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using EduQuiz.Application.Common.IUseCase;
+using EduQuiz.Infrastructure.Services.FileStorageService;
 using EduQuiz.Infrastructure.UnitOfWork;
 using EduQuiz.Share.Enums;
 using EduQuiz.Share.Extensions;
@@ -13,10 +14,12 @@ namespace EduQuiz.Application.UseCases.Account
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public GetUserProfileUseCase(IUnitOfWork unitOfWork, IMapper mapper) 
+        private readonly IFileStorageService _fileStorageService;
+        public GetUserProfileUseCase(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService) 
         { 
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task<GetUserProfileUseCaseOutput> HandleAsync(GetUserProfileUseCaseInput useCaseInput)
@@ -62,8 +65,7 @@ namespace EduQuiz.Application.UseCases.Account
                     })
                     .ToListAsync();
             }
-
-            if (account.Role.Name == RoleConstant.TEACHER)
+            else if (account.Role.Name == RoleConstant.TEACHER)
             {
                 var teacherQuery = _unitOfWork.Teachers.Query()
                     .Where(x => x.AccountId == account.Id)
@@ -93,6 +95,13 @@ namespace EduQuiz.Application.UseCases.Account
                         Times = DayExtension.ToListDayFormat(x.Select(x => x.Slot.StartTime).ToList())
                     })
                     .ToListAsync();
+            }
+
+            if (result.Avatar != null)
+            {
+                var fileResult = await _fileStorageService.GetFileAsync(result.Avatar);
+                await using var stream = fileResult.Content;
+                result.Avatar = await FileExtension.StreamToBase64Async(stream);
             }
 
             return result;
